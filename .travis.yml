@@ -1,0 +1,50 @@
+# Trusty Beta requires sudo per https://docs.travis-ci.com/user/ci-environment/
+sudo: required
+dist: trusty
+
+services:
+  - docker
+
+# We don't actually use anything java, but this feels the least jarring "language"
+language: java
+
+# Even though this shouldn't be needed, one build failed because of SSH known hosts:
+# https://travis-ci.org/openzipkin/docker-zipkin/builds/78704161
+addons:
+  ssh_known_hosts: github.com
+
+# Version tags are used to trigger these Travis CI runs
+branches:
+  only:
+    - /^[0-9]+\.[0-9]+\.[0-9]+$/
+
+# jq is used in release.sh to parse the responses of the quay.io API
+install:
+  - sudo wget https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64 -O /usr/local/bin/jq
+  - sudo chmod o+x /usr/local/bin/jq
+
+before_script:
+  # Log in to Docker Hub, needed to mirror images built on quay.io
+  - docker login -u dockerzipkindeployer -p "$DOCKERHUB_PASSWORD"
+
+script:
+ # Also known as doit.sh
+ - ./release.sh $TRAVIS_TAG
+
+env:
+  global:
+    # The release process syncs minor and major version tags to the newly built subminor version tag
+    # via the quay.io API, using these credentials.
+    # travis encrypt QUAYIO_OAUTH2_TOKEN=from https://quay.io/organization/openzipkin?tab=applications
+    - secure: "PM4TPFVk/HWFdltwPdbxUNQ/Z4xhPYl4R2V6Xr0TVluHE+Xy8RBXzxOiwXIhkZ4MsUhyd9VSNVSVgOVyS3fFJMHI0y94ezUSKwsnFV1K6+ESUA3L51n8+YbF2IrJqVl0aECqMBvPFBFGlBOyxwlpYFppaRHX3uK5XWLYOMQwewJNafqYMaKUEJFFnhrQgJ/WQCBzKA8SkzB4f5GHKloL0s7KFH1ITw6O6luE0rmkidVadLzLBZaGtQAJzRg6tkitmcQVpJ66m3XE5YmspSU1FL9Cie4kmcaPGUMOcwAmA5jZknBVKg/t2R8wHuUwIYy/k9V6Ca7hyW5knbOflNsQH7SNVbvKYb04YQEcVmLQIUVQsG1RUa9uk0cZtVKxCvl/OaLsY/zjyCo94huZANM5Bx6MNsq6djF1rIEu19C6RksHSbI7YqkDenfuFwPQhjEwwmetuyuxHotEZa9ZEUJ2ZfpU7juy7L9gY/9dtizoL3BsgcdJfCAScCwHmUWIsxJCvxot9QjydqgGySR/GarXwu7a7NwAQ0PObK5aIK/iyLftcZ32o27yBgwQBxhzJlqHeJemJV93bysVv2gjNeLpWSHDZZI6/QtPR5OabMED9AYufqVaIQFfm8+RkuUiRHlkPJ0zN1Z1naKdYXXaYQ2mieSr/NGVCy2/76D0JJ6VKNc="
+    # The release process pushes images to Docker Hub, using these credentials
+    # travis encrypt DOCKERHUB_PASSWORD=dockerzipkindeployer password from lastpass
+    - secure: "AA47krBDA+m6EZnh3NEr6huwFqzp/xNWrl/x+C02s5CUrq55pPkzntqIuI8vxNzyItDpztbCspswZw3Olg71u5I2a7yvlcbCW6VNRMp7vrXxhYbAXl3RcXmacw7g5ao6R2epgPGzR6R/HV9R4FSJvo0Yi1DpPbfAU+rp9iQSJKD136Qhi3RaAh7eASjERGtYbXoN3YW1wNT82uCG08GWMG3WKbIOZTWACR+kRJ9eojitdO55QEpR83HrSaILI6xza+vZ/U4bqwM+S58VDtuDdumVG+Ci3cTST6Yw7AqMOkSRyvh/D7SAjuNLC+UeHaBcxYKhfZhfKBWms60pFSdd5FKLM2n+YtVdlRuw6WXyozDIA70LYND8QnksfEALcATiaBuTQEN/mQ7wYfZyNNfnBXKeQbDY8XG4kJrVG6apubrlIN/SCC+Asc4ecT05o7UQybZmsytOxHTGrq00MKDVvY946hVoErhma3HniCo9nD9Jw1QCRvViZFtLzC1DVsSI3mR/wuInRIkt7xKLNMQ+H6z2rAv2rzdRBnGsyKUOzRM7cQPzHecxMz6JcD1Aqm5Ige71E+7RcnNlK3VfrWyaYrw+FjFSMboHnAmGmITdd+O7wE1zZJpK5jZA8jOMN3iOo0T+kRWWBeke2K9P2zaSk4yx5yJC1c1CrqwGpP0uPEA="
+
+notifications:
+  webhooks:
+    urls:
+      - https://webhooks.gitter.im/e/637e968b45032d16ee26
+    on_success: change
+    on_failure: always
+    on_start: false

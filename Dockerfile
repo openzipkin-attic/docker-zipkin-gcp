@@ -16,6 +16,8 @@ MAINTAINER OpenZipkin "http://zipkin.io/"
 
 ENV ZIPKIN_GCP_REPO https://jcenter.bintray.com
 ENV ZIPKIN_GCP_VERSION 0.1.0
+# Readback is currently not supported
+ENV QUERY_ENABLED false
 
 RUN apk add unzip && \ 
   curl -SL $ZIPKIN_GCP_REPO/io/zipkin/gcp/zipkin-autoconfigure-storage-stackdriver/$ZIPKIN_GCP_VERSION/zipkin-autoconfigure-storage-stackdriver-$ZIPKIN_GCP_VERSION-module.jar > stackdriver.jar && \

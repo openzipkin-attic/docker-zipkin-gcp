@@ -11,11 +11,11 @@
 # or implied. See the License for the specific language governing permissions and limitations under
 # the License.
 #
-FROM openzipkin/zipkin:2.7.0
+FROM openzipkin/zipkin:2.7.1
 MAINTAINER OpenZipkin "http://zipkin.io/"
 
 ENV ZIPKIN_GCP_REPO https://jcenter.bintray.com
-ENV ZIPKIN_GCP_VERSION 0.3.0
+ENV ZIPKIN_GCP_VERSION 0.3.2
 # Readback is currently not supported
 ENV QUERY_ENABLED false
 

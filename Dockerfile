@@ -21,7 +21,7 @@ ENV QUERY_ENABLED false
 # must match JRE, in this case zipkin:2.12.1 uses 1.8.0_191
 # see https://github.com/square/okhttp/blob/master/pom.xml for example mappings
 # this and the download of alpn-boot will be removed with https://github.com/openzipkin/docker-jre-full/issues/9
-ENV ALPN_VERSION 8.1.12.v20181017
+ENV ALPN_VERSION 8.1.13.v20181017
 
 RUN apk add unzip && \ 
   curl -SL $ZIPKIN_GCP_REPO/org/mortbay/jetty/alpn/alpn-boot/$ALPN_VERSION/alpn-boot-$ALPN_VERSION.jar > alpn-boot.jar && \

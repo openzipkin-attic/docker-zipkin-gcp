@@ -17,7 +17,7 @@ FROM alpine
 WORKDIR /zipkin-gcp
 
 ENV ZIPKIN_GCP_REPO https://jcenter.bintray.com
-ENV ZIPKIN_GCP_VERSION 0.10.1
+ENV ZIPKIN_GCP_VERSION 0.10.3
 
 RUN apk add curl unzip && \
   curl -SL $ZIPKIN_GCP_REPO/io/zipkin/gcp/zipkin-autoconfigure-storage-stackdriver/$ZIPKIN_GCP_VERSION/zipkin-autoconfigure-storage-stackdriver-$ZIPKIN_GCP_VERSION-module.jar > stackdriver.jar && \
@@ -28,7 +28,8 @@ RUN apk add curl unzip && \
 FROM openzipkin/zipkin:2.12.5
 MAINTAINER OpenZipkin "http://zipkin.io/"
 
-ENV ZIPKIN_GCP_VERSION 0.10.1
+COPY --from=0 /zipkin-gcp/ /zipkin/
+
 # Readback is currently not supported
 ENV QUERY_ENABLED false
 

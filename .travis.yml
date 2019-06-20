@@ -31,6 +31,14 @@ script:
  # Also known as doit.sh
  - ./release.sh $TRAVIS_TAG
 
+notifications:
+  webhooks:
+    urls:
+      - https://webhooks.gitter.im/e/ead3c37d57527214e9f2
+      - https://webhooks.gitter.im/e/e57478303f87ecd7bffc
+    on_success: change
+    on_failure: always
+
 env:
   global:
     # The release process syncs minor and major version tags to the newly built subminor version tag
@@ -40,11 +48,3 @@ env:
     # The release process pushes images to Docker Hub, using these credentials
     # travis encrypt DOCKERHUB_PASSWORD=dockerzipkindeployer password from lastpass
     - secure: "H3JfhFIZs8i9GmpRR3Zjx74GrKtes600GL7uTNGgGCLfegYhGnYFdXETlMcbiezqi2n+DcHOp8r3g0xiV1UbCXjX4eJYgnSZYOBYjY6OFlwMOmsTWJQA4xcLJFI2BGd+Zed3BOHx07+mhaRRN934HYvsqTpgBQn8GJq8Qs4hrjbEAG5JWm8w9ebkFnDSUL5YZdV+jcpdq7j8pVGmvQz1RGia4M1TSOWld9OpRY1ABMrkUGo8f6Ew0wCXjPPOSsnCjVGo4POKTRbASN+KrBLiWlTg7MRWnkh8VeA6hUtWPvcZgIa9NQdHmew2D+ObY44BIhCiPsTc24wl1VyWVMXpb6yWGRTji/BR1olHqhnNfhBLwtb+gKJai+hS14l3Bm3OASBwl6d+2ec50LDSjXRNH15cSsQrv95v90YcJqDKX9yxURJk2zi146PqzF9y0/DoVPoky3Nsl7YmvbFgh6wzns+N6oL/RUmfgcdvzk06VcS2AiDl1Z5Vqy3bGtooLa1v47G1oHhyrJym/cJmkBPhrCY4iYc/nXPjfSrX5S84CRK3cNSviCjyGvbolAvDpdxglzjXqHLA5Su4Lj+dkuAdfbVEgsAGtT/HUzxyAhNtU2QWX66sg+/Krv2em9DcfAAgxkWFHtnfsFz3Qll46oF1euIgLLHiwJCQNy9sK83XMFE="
-
-notifications:
-  webhooks:
-    urls:
-      - https://webhooks.gitter.im/e/637e968b45032d16ee26
-    on_success: change
-    on_failure: always
-    on_start: false

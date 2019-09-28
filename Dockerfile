@@ -17,7 +17,7 @@ FROM alpine
 WORKDIR /zipkin-gcp
 
 ENV ZIPKIN_GCP_REPO https://repo1.maven.org/maven2
-ENV ZIPKIN_GCP_VERSION 0.14.0
+ENV ZIPKIN_GCP_VERSION 0.14.1
 
 RUN apk add curl unzip && \
   curl -SL $ZIPKIN_GCP_REPO/io/zipkin/gcp/zipkin-autoconfigure-storage-stackdriver/$ZIPKIN_GCP_VERSION/zipkin-autoconfigure-storage-stackdriver-$ZIPKIN_GCP_VERSION-module.jar > stackdriver.jar && \
@@ -25,7 +25,7 @@ RUN apk add curl unzip && \
   unzip stackdriver.jar -d stackdriver && \
   rm stackdriver.jar
 
-FROM openzipkin/zipkin:2.16.2
+FROM openzipkin/zipkin:2.17.0
 MAINTAINER OpenZipkin "https://zipkin.io/"
 
 COPY --from=0 /zipkin-gcp/ /zipkin/

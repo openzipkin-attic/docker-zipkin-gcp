@@ -1,7 +1,10 @@
-[![Build Status](https://travis-ci.org/openzipkin/docker-zipkin-gcp.svg)](https://travis-ci.org/openzipkin/docker-zipkin-gcp)
-[![zipkin-gcp](https://quay.io/repository/openzipkin/zipkin-gcp/status "zipkin-gcp")](https://quay.io/repository/openzipkin/zipkin-gcp)
-
 # docker-zipkin-gcp
+
+## Archived
+
+This repository is archived as it has been folded into https://github.com/openzipkin/zipkin-gcp/tree/master/docker
+
+## Overview
 
 This repository contains the Docker build definition and release process for
 [openzipkin/zipkin-gcp](https://github.com/openzipkin/zipkin-gcp).
